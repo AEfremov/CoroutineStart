@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.efremov.coroutinestart.databinding.ActivityMainBinding
@@ -32,17 +34,23 @@ class MainActivity : AppCompatActivity() {
             binding.progress.isVisible = true
             binding.buttonLoad.isEnabled = false
 
-            val jobCity = lifecycleScope.launch {
-                val city = loadCity()
-                binding.tvLocation.text = city
+            val deferredCity: Deferred<String> = lifecycleScope.async {
+                loadCity()
             }
-            val jobTemperature = lifecycleScope.launch {
+            val deferredTemperature: Deferred<Int> = lifecycleScope.async {
                 val temperature = loadTemperature()
-                binding.tvTemperature.text = temperature.toString()
+                temperature
             }
             lifecycleScope.launch {
-                jobCity.join()
-                jobTemperature.join()
+                val city = deferredCity.await()
+                val temp = deferredTemperature.await()
+                binding.tvLocation.text = city
+                binding.tvTemperature.text = temp.toString()
+                Toast.makeText(
+                    this@MainActivity,
+                    "City: $city Temp: $temp",
+                    Toast.LENGTH_SHORT
+                ).show()
                 binding.progress.isVisible = false
                 binding.buttonLoad.isEnabled = true
             }
