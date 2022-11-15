@@ -29,8 +29,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.buttonLoad.setOnClickListener {
+            binding.progress.isVisible = true
+            binding.buttonLoad.isEnabled = false
+
+            val jobCity = lifecycleScope.launch {
+                val city = loadCity()
+                binding.tvLocation.text = city
+            }
+            val jobTemperature = lifecycleScope.launch {
+                val temperature = loadTemperature()
+                binding.tvTemperature.text = temperature.toString()
+            }
             lifecycleScope.launch {
-                loadData()
+                jobCity.join()
+                jobTemperature.join()
+                binding.progress.isVisible = false
+                binding.buttonLoad.isEnabled = true
             }
         }
 //        handler.sendMessage(Message.obtain(handler, 0, 17))
@@ -41,10 +55,8 @@ class MainActivity : AppCompatActivity() {
         binding.buttonLoad.isEnabled = false
         val city = loadCity()
         binding.tvLocation.text = city
-        val temperature = loadTemperature(city)
+        val temperature = loadTemperature()
         binding.tvTemperature.text = temperature.toString()
-        binding.progress.isVisible = false
-        binding.buttonLoad.isEnabled = true
     }
 
     private fun loadWithoutCoroutine(step: Int = 0, obj: Any? = null) {
@@ -83,6 +95,11 @@ class MainActivity : AppCompatActivity() {
         return "Moscow"
     }
 
+    private suspend fun loadTemperature(): Int {
+        delay(5000)
+        return 17
+    }
+
     private fun loadTemperatureWithoutCoroutine(city: String, callback: (Int) -> Unit) {
         Toast.makeText(
             this,
@@ -95,13 +112,4 @@ class MainActivity : AppCompatActivity() {
         }, 5000)
     }
 
-    private suspend fun loadTemperature(city: String): Int {
-        Toast.makeText(
-            this,
-            getString(R.string.loading_temperature_toast, city),
-            Toast.LENGTH_SHORT
-        ).show()
-        delay(5000)
-        return 17
-    }
 }
