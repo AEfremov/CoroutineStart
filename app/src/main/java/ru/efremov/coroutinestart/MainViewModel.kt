@@ -7,7 +7,8 @@ import kotlin.concurrent.thread
 
 class MainViewModel : ViewModel() {
 
-    private val parentJob = Job()
+//    private val parentJob = Job()
+    private val parentJob = SupervisorJob()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.d(LOG_TAG, "exception caught: $throwable")
     }
@@ -26,11 +27,21 @@ class MainViewModel : ViewModel() {
                 error()
             }
         }
-        val childJob3 = coroutineScope.launch {
+        val childJob3 = coroutineScope.async {
             delay(1000)
-//            error()
+            error()
             Log.d(LOG_TAG, "3 coroutine finished")
         }
+        coroutineScope.launch {
+            childJob3.await()
+        }
+//        val childJob3 = coroutineScope.launch {
+//            val res = async {
+//                delay(1000)
+//                error()
+//                Log.d(LOG_TAG, "3 coroutine finished")
+//            }
+//        }
     }
 
     private fun error() {
