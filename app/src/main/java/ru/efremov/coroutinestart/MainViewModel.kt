@@ -8,8 +8,10 @@ import kotlin.concurrent.thread
 class MainViewModel : ViewModel() {
 
     private val parentJob = Job()
-
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + parentJob)
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Log.d(LOG_TAG, "exception caught: $throwable")
+    }
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + parentJob + exceptionHandler)
 
     fun method() {
         val childJob1 = coroutineScope.launch {
@@ -18,16 +20,21 @@ class MainViewModel : ViewModel() {
         }
         val childJob2 = coroutineScope.launch {
             delay(2000)
-            childJob1.cancel()
             Log.d(LOG_TAG, "2 coroutine finished")
+            launch {
+                Log.d(LOG_TAG, "2 coroutine do something")
+                error()
+            }
         }
-//        thread {
-//            Thread.sleep(1000)
-//            parentJob.cancel()
-//            Log.d(LOG_TAG, "Parent job active: ${parentJob.isActive}")
-//        }
-        Log.d(LOG_TAG, parentJob.children.contains(childJob1).toString())
-        Log.d(LOG_TAG, parentJob.children.contains(childJob2).toString())
+        val childJob3 = coroutineScope.launch {
+            delay(1000)
+//            error()
+            Log.d(LOG_TAG, "3 coroutine finished")
+        }
+    }
+
+    private fun error() {
+        throw java.lang.RuntimeException()
     }
 
     override fun onCleared() {
