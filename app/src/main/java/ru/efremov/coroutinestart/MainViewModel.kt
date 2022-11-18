@@ -4,83 +4,64 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
-import kotlin.concurrent.thread
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import java.util.*
 
 class MainViewModel : ViewModel() {
 
-    fun method() {
-        val job = viewModelScope.launch(Dispatchers.Default) {
-            Log.d(LOG_TAG, "Started")
-            val before = System.currentTimeMillis()
-            var count = 0
-            for (i in 0 until 100_000_000) {
-                for (j in 0 until 100) {
-                    ensureActive()
-                    count++
-//                    if (isActive) {
-//                        count++
-//                    } else {
-//                        throw CancellationException()
-//                    }
+    fun main() {
+        viewModelScope.launch {
+
+//            val coroutines: List<Deferred<String>> = List(100) {
+//                async(start = CoroutineStart.DEFAULT) {
+//                    doWork(it.toString())
+//                }
+//            }
+
+            val coroutines: List<Job> = List(100) {
+                launch(CoroutineName("main coroutine"), start = CoroutineStart.DEFAULT) {
+                    doWork(it.toString())
                 }
             }
-            Log.d(LOG_TAG, "Finished: ${System.currentTimeMillis() - before}")
-        }
-        job.invokeOnCompletion {
-            Log.d(LOG_TAG, "Coroutine was cancelled: $it")
-        }
-        viewModelScope.launch {
-            delay(3000)
-            job.cancel()
+
+            coroutines.forEach {
+                it.cancel("Cancel")
+//                Log.d(LOG_TAG, it.await())
+            }
+
+//            repeat(100) {
+//                launch(Dispatchers.IO) {
+//                    doWorkAsync(it.toString())
+//                }
+//            }
         }
     }
 
+    private suspend fun doWork(name: String): String {
+        delay(Random().nextInt(1000).toLong())
+        return "Done. $name"
+    }
 
-////    private val parentJob = Job()
-//    private val parentJob = SupervisorJob()
-//    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-//        Log.d(LOG_TAG, "exception caught: $throwable")
-//    }
-//    private val coroutineScope = CoroutineScope(Dispatchers.Main + parentJob + exceptionHandler)
-//
-//    fun method() {
-//        val childJob1 = coroutineScope.launch {
-//            delay(3000)
-//            Log.d(LOG_TAG, "1 coroutine finished")
-//        }
-//        val childJob2 = coroutineScope.launch {
-//            delay(2000)
-//            Log.d(LOG_TAG, "2 coroutine finished")
-//            launch {
-//                Log.d(LOG_TAG, "2 coroutine do something")
-//                error()
-//            }
-//        }
-//        val childJob3 = coroutineScope.async {
-//            delay(1000)
-//            error()
-//            Log.d(LOG_TAG, "3 coroutine finished")
-//        }
-//        coroutineScope.launch {
-//            childJob3.await()
-//        }
-////        val childJob3 = coroutineScope.launch {
-////            val res = async {
-////                delay(1000)
-////                error()
-////                Log.d(LOG_TAG, "3 coroutine finished")
-////            }
-////        }
-//    }
-//
-//    private fun error() {
-//        throw java.lang.RuntimeException()
-//    }
-//
-//    override fun onCleared() {
-//        super.onCleared()
-//        coroutineScope.cancel()
-//    }
+    private suspend fun doWorkAsync(name: String) {
+        delay(Random().nextInt(1000).toLong())
+        Log.d(LOG_TAG, "Done in $name")
+    }
+
+    fun <T> Flow<T>.unique(): Flow<T> {
+        return flow {
+            var lastValue: Any? = NoValue
+            collect { value: T ->
+                if (lastValue != value) {
+                    lastValue = value
+                    emit(value)
+                }
+            }
+        }
+    }
+
+    private object NoValue
 
     companion object {
 

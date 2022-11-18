@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        vm.method()
+        vm.main()
+//        lifecycleScope.launch {
+//            vm.doWork()
+//        }
     }
 }
