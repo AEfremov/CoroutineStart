@@ -13,55 +13,43 @@ class MainViewModel : ViewModel() {
 
     fun main() {
         viewModelScope.launch {
-
-//            val coroutines: List<Deferred<String>> = List(100) {
-//                async(start = CoroutineStart.DEFAULT) {
-//                    doWork(it.toString())
-//                }
-//            }
-
-            val coroutines: List<Job> = List(100) {
-                launch(CoroutineName("main coroutine"), start = CoroutineStart.DEFAULT) {
-                    doWork(it.toString())
-                }
-            }
-
-            coroutines.forEach {
-                it.cancel("Cancel")
-//                Log.d(LOG_TAG, it.await())
-            }
-
-//            repeat(100) {
-//                launch(Dispatchers.IO) {
-//                    doWorkAsync(it.toString())
+            doWorld()
+            log("DONE!")
+//            repeat(100_000) {
+//                launch {
+//                    delay(1000)
+//                    log(".")
 //                }
 //            }
         }
     }
 
-    private suspend fun doWork(name: String): String {
-        delay(Random().nextInt(1000).toLong())
-        return "Done. $name"
+    private suspend fun doWorld() = coroutineScope {
+        val job1 = launch {
+            delay(2000)
+            log("World 2!")
+        }
+//        val job2 = launch {
+//            delay(1000)
+//            log("World 1!")
+//        }
+        log("Hello")
+        job1.join()
+//        job2.join()
     }
 
-    private suspend fun doWorkAsync(name: String) {
-        delay(Random().nextInt(1000).toLong())
-        Log.d(LOG_TAG, "Done in $name")
-    }
-
-    fun <T> Flow<T>.unique(): Flow<T> {
-        return flow {
-            var lastValue: Any? = NoValue
-            collect { value: T ->
-                if (lastValue != value) {
-                    lastValue = value
-                    emit(value)
-                }
+    private suspend fun doRepeat() = coroutineScope {
+        repeat(100_000) {
+            launch {
+                delay(1000)
+                log(".")
             }
         }
     }
 
-    private object NoValue
+    private fun log(message: String) {
+        Log.d(LOG_TAG, message)
+    }
 
     companion object {
 
