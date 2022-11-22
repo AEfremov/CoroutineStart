@@ -30,8 +30,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         vm.main()
-//        lifecycleScope.launch {
-//            vm.doWork()
-//        }
+
+        vm.state.observe(this) {
+            when (it) {
+                is MainViewModel.State.UserParams -> {
+                    binding.inputUserName.setText(it.userName)
+                    binding.inputPassToken.setText(it.passwordOrToken)
+                    binding.tvOrganization.text = it.organizationName
+                    binding.tvVariant.text = it.loadingVariant
+                }
+                is MainViewModel.State.ContributorsList -> {
+                    Log.d("ContributorsList", it.items.toString())
+                }
+            }
+        }
+
+        binding.buttonLoad.setOnClickListener {
+            vm.setUserParams()
+        }
+
+        binding.buttonSaveParams.setOnClickListener {
+            vm.saveUserParamsToStorage()
+        }
     }
 }

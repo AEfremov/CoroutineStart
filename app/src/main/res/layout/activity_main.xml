@@ -6,49 +6,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    >
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_location_label"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_user_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/city"
-        android:textColor="@color/purple_500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="GitHub Username">
 
-    <TextView
-        android:id="@+id/tv_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tv_location_label"
-        app:layout_constraintStart_toEndOf="@id/tv_location_label"
-        app:layout_constraintTop_toTopOf="@id/tv_location_label"
-        tools:text="Moscow"
-        />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tv_temperature_label"
-        android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pass_token"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/temperature"
-        android:textColor="@color/purple_500"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_location_label"
-        />
+        app:layout_constraintTop_toBottomOf="@id/til_user_name"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Password/Token">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_pass_token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/tv_temperature"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_organization"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tv_temperature_label"
-        app:layout_constraintStart_toEndOf="@id/tv_temperature_label"
-        app:layout_constraintTop_toTopOf="@id/tv_temperature_label"
-        tools:text="17"
-        />
+        android:text="kotlin"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/til_pass_token"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/tv_variant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BLOCKING"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_organization"
+        android:layout_marginTop="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_contributors"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_variant"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/button_load"
+        android:layout_marginBottom="8dp" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -58,15 +85,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_load"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/download"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="Load contributors"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_save_params"
+        android:layout_marginEnd="8dp" />
+
+    <Button
+        android:id="@+id/button_save_params"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="Save params"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_load"
+        android:layout_marginStart="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
