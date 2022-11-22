@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".presentation.MainActivity"
     android:padding="16dp">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="GitHub Username">
+        android:hint="@string/github_username">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_user_name"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@id/til_user_name"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="Password/Token">
+        android:hint="@string/password_token">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_pass_token"
@@ -41,41 +41,44 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_organization"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="kotlin"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_pass_token"
-        android:layout_marginTop="8dp" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_organization"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="kotlin"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/til_pass_token"-->
+<!--        android:layout_marginTop="8dp" />-->
 
-    <TextView
-        android:id="@+id/tv_variant"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="BLOCKING"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_organization"
-        android:layout_marginTop="8dp" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_variant"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="BLOCKING"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_organization"-->
+<!--        android:layout_marginTop="8dp" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contributors"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_variant"
+        app:layout_constraintTop_toBottomOf="@id/til_pass_token"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@id/button_load"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        tools:listitem="@layout/row_contributor" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -91,7 +94,7 @@
         android:id="@+id/button_load"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:text="Load contributors"
+        android:text="@string/load_contributors"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/button_save_params"
@@ -101,7 +104,7 @@
         android:id="@+id/button_save_params"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:text="Save params"
+        android:text="@string/save_params"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_load"

@@ -3,8 +3,14 @@ package ru.efremov.coroutinestart
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.efremov.coroutinestart.core.logError
+import ru.efremov.coroutinestart.core.logRepos
+import ru.efremov.coroutinestart.core.logUsers
+import ru.efremov.coroutinestart.data.aggregate
+import ru.efremov.coroutinestart.data.network.GitHubService
+import ru.efremov.coroutinestart.data.network.RequestData
+import ru.efremov.coroutinestart.data.network.User
 import java.util.*
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
 fun loadContributorsCallbacks(

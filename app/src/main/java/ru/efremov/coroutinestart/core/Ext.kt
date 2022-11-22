@@ -1,7 +1,10 @@
-package ru.efremov.coroutinestart
+package ru.efremov.coroutinestart.core
 
 import android.util.Log
 import retrofit2.Response
+import ru.efremov.coroutinestart.data.network.Repo
+import ru.efremov.coroutinestart.data.network.RequestData
+import ru.efremov.coroutinestart.data.network.User
 
 fun logDebug(tag: String, msg: String?) {
     Log.d(tag, msg ?: "")

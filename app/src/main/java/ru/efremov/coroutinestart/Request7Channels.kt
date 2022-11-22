@@ -1,6 +1,9 @@
 package ru.efremov.coroutinestart
 
 import kotlinx.coroutines.coroutineScope
+import ru.efremov.coroutinestart.data.network.GitHubService
+import ru.efremov.coroutinestart.data.network.RequestData
+import ru.efremov.coroutinestart.data.network.User
 
 suspend fun loadContributorsChannels(
     service: GitHubService,

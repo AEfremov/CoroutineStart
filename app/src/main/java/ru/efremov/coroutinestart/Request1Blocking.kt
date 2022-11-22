@@ -1,6 +1,12 @@
 package ru.efremov.coroutinestart
 
 import retrofit2.Response
+import ru.efremov.coroutinestart.core.logRepos
+import ru.efremov.coroutinestart.core.logUsers
+import ru.efremov.coroutinestart.data.aggregate
+import ru.efremov.coroutinestart.data.network.GitHubService
+import ru.efremov.coroutinestart.data.network.RequestData
+import ru.efremov.coroutinestart.data.network.User
 
 fun loadContributorsBlocking(service: GitHubService, req: RequestData): List<User> {
     val repos = service

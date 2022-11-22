@@ -1,10 +1,10 @@
 package ru.efremov.coroutinestart
 
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import ru.efremov.coroutinestart.data.network.RequestData
+import ru.efremov.coroutinestart.data.network.User
+import ru.efremov.coroutinestart.data.network.createGitHubService
 import kotlin.coroutines.CoroutineContext
 
 enum class Variant {
@@ -76,7 +76,12 @@ interface Contributors: CoroutineScope {
                     updateResults(users, startTime)
                 }
             }
-            Variant.SUSPEND -> TODO()
+            Variant.SUSPEND -> {
+                launch(CoroutineName("Variant.SUSPEND")) {
+                    val users = loadContributorsSuspend(service, req)
+                    updateResults(users, startTime)
+                }.setUpCancellation()
+            }
             Variant.CONCURRENT -> TODO()
             Variant.NOT_CANCELLABLE -> TODO()
             Variant.PROGRESS -> TODO()

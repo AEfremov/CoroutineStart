@@ -1,4 +1,6 @@
-package ru.efremov.coroutinestart
+package ru.efremov.coroutinestart.data
+
+import ru.efremov.coroutinestart.data.network.User
 
 fun List<User>.aggregate(): List<User> =
     groupBy { it.login }

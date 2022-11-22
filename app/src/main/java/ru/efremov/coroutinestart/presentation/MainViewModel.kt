@@ -1,21 +1,18 @@
-package ru.efremov.coroutinestart
+package ru.efremov.coroutinestart.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import java.util.*
+import ru.efremov.coroutinestart.*
+import ru.efremov.coroutinestart.core.logDebug
+import ru.efremov.coroutinestart.data.login
+import ru.efremov.coroutinestart.data.network.User
+import ru.efremov.coroutinestart.data.token
+import ru.efremov.coroutinestart.domain.ContributorInfo
+import ru.efremov.coroutinestart.domain.toContributorInfo
 
 class MainViewModel : ViewModel(), Contributors {
-
-    // todo убрать перед коммитом
-    private val githubUserName = "AEfremov"
-    private val githubToken = "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"
 
     sealed class State {
         data class UserParams(
@@ -25,7 +22,7 @@ class MainViewModel : ViewModel(), Contributors {
             var loadingVariant: String
         ): State()
         data class ContributorsList(
-            var items: List<User>
+            var items: List<ContributorInfo>
         ): State()
     }
 
@@ -37,7 +34,12 @@ class MainViewModel : ViewModel(), Contributors {
         get() = Job()
 
     override fun getParams(): Params {
-        return Params(githubUserName, githubToken, "kotlin", Variant.CALLBACKS)
+        return Params(
+            login,
+            token,
+            "kotlin",
+            Variant.SUSPEND
+        )
     }
 
     override fun setParams(params: Params) {
@@ -50,15 +52,18 @@ class MainViewModel : ViewModel(), Contributors {
     }
 
     override fun getSelectedVariant(): Variant {
-        return Variant.CALLBACKS
+        return Variant.SUSPEND
     }
 
     override fun updateContributors(users: List<User>) {
         if (users.isNotEmpty()) {
+            val contributors = users
+                .map {
+                    it.toContributorInfo()
+                }.toList()
             _state.value = State.ContributorsList(
-                items = users
+                items = contributors
             )
-            // todo отобразить юзеров в recyclerview
         }
     }
 
@@ -67,7 +72,8 @@ class MainViewModel : ViewModel(), Contributors {
     }
 
     override fun setActionsStatus(newLoadingEnabled: Boolean, cancellationEnabled: Boolean) {
-        logDebug(LOG_TAG, "newLoadingEnabled=$newLoadingEnabled," +
+        logDebug(
+            LOG_TAG, "newLoadingEnabled=$newLoadingEnabled," +
                 " cancellationEnabled=$cancellationEnabled")
     }
 

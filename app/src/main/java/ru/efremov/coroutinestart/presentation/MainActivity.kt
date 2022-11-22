@@ -1,21 +1,13 @@
-package ru.efremov.coroutinestart
+package ru.efremov.coroutinestart.presentation
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import ru.efremov.coroutinestart.databinding.ActivityMainBinding
-import kotlin.concurrent.thread
+import ru.efremov.coroutinestart.presentation.adapters.ContributorAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,16 +28,27 @@ class MainActivity : AppCompatActivity() {
                 is MainViewModel.State.UserParams -> {
                     binding.inputUserName.setText(it.userName)
                     binding.inputPassToken.setText(it.passwordOrToken)
-                    binding.tvOrganization.text = it.organizationName
-                    binding.tvVariant.text = it.loadingVariant
+//                    binding.tvOrganization.text = it.organizationName
+//                    binding.tvVariant.text = it.loadingVariant
                 }
                 is MainViewModel.State.ContributorsList -> {
                     Log.d("ContributorsList", it.items.toString())
+                    val adapter = ContributorAdapter(this)
+                    binding.rvContributors.adapter = adapter
+                    binding.rvContributors.itemAnimator = null
+                    val llm = LinearLayoutManager(this@MainActivity)
+                    val decor = DividerItemDecoration(
+                        binding.rvContributors.context,
+                        llm.orientation
+                    )
+                    binding.rvContributors.addItemDecoration(decor)
+                    adapter.submitList(it.items)
                 }
             }
         }
 
         binding.buttonLoad.setOnClickListener {
+            binding.buttonLoad.isEnabled = false // todo
             vm.setUserParams()
         }
 
