@@ -1,8 +1,10 @@
 package ru.efremov.coroutinestart.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import ru.efremov.coroutinestart.*
 import ru.efremov.coroutinestart.core.logDebug
@@ -11,6 +13,7 @@ import ru.efremov.coroutinestart.data.network.User
 import ru.efremov.coroutinestart.data.token
 import ru.efremov.coroutinestart.domain.ContributorInfo
 import ru.efremov.coroutinestart.domain.toContributorInfo
+import kotlin.concurrent.thread
 
 class MainViewModel : ViewModel(), Contributors {
 
@@ -84,16 +87,20 @@ class MainViewModel : ViewModel(), Contributors {
 
     fun main() {
         init()
-//        viewModelScope.launch {
-//            doWorld()
-//            logDebug("DONE!")
-////            repeat(100_000) {
-////                launch {
-////                    delay(1000)
-////                    log(".")
-////                }
-////            }
-//        }
+        viewModelScope.launch {
+            val deferred: Deferred<Int> = async {
+                loadData()
+            }
+            logDebug("deferred", "waiting...")
+            logDebug("await", "${deferred.await()}")
+        }
+    }
+
+    private suspend fun loadData(): Int {
+        logDebug("loadData", "loading...")
+        delay(1000L)
+        logDebug("loadData", "loaded!")
+        return 100
     }
 
     private suspend fun doWorld() = coroutineScope {
