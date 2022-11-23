@@ -11,7 +11,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:buttonStyle">@style/Widget.CoroutineStart.Button</item>
+<!--        <item name="android:buttonStyle">@style/Widget.CoroutineStart.Button</item>-->
+        <item name="materialButtonStyle">@style/Widget.CoroutineStart.Button</item>
     </style>
 
     <style name="Base.Theme.CoroutineStart" parent="Base.V26.Theme.CoroutineStart" />
