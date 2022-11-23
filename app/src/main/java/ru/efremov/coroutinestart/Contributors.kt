@@ -82,7 +82,14 @@ interface Contributors: CoroutineScope {
                     updateResults(users, startTime)
                 }.setUpCancellation()
             }
-            Variant.CONCURRENT -> TODO()
+            Variant.CONCURRENT -> {
+                launch(Dispatchers.Default) {
+                    val users = loadContributorsConcurrent(service, req)
+                    withContext(Dispatchers.Main) {
+                        updateResults(users, startTime)
+                    }
+                }.setUpCancellation()
+            }
             Variant.NOT_CANCELLABLE -> TODO()
             Variant.PROGRESS -> TODO()
             Variant.CHANNELS -> TODO()

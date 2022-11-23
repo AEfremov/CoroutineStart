@@ -41,7 +41,7 @@ class MainViewModel : ViewModel(), Contributors {
             login,
             token,
             "kotlin",
-            Variant.SUSPEND
+            Variant.CONCURRENT
         )
     }
 
@@ -55,7 +55,7 @@ class MainViewModel : ViewModel(), Contributors {
     }
 
     override fun getSelectedVariant(): Variant {
-        return Variant.SUSPEND
+        return Variant.CONCURRENT
     }
 
     override fun updateContributors(users: List<User>) {
@@ -87,13 +87,26 @@ class MainViewModel : ViewModel(), Contributors {
 
     fun main() {
         init()
-        viewModelScope.launch {
-            val deferred: Deferred<Int> = async {
-                loadData()
-            }
-            logDebug("deferred", "waiting...")
-            logDebug("await", "${deferred.await()}")
-        }
+
+//        viewModelScope.launch {
+//            val deferreds: List<Deferred<Int>> = (1..3).map {
+//                async {
+//                    delay(1000L * it)
+//                    logDebug("deferreds", it.toString())
+//                    it
+//                }
+//            }
+//            val sum = deferreds.awaitAll().sum()
+//            logDebug("sum", sum.toString())
+//        }
+
+//        viewModelScope.launch {
+//            val deferred: Deferred<Int> = async {
+//                loadData()
+//            }
+//            logDebug("deferred", "waiting...")
+//            logDebug("await", "${deferred.await()}")
+//        }
     }
 
     private suspend fun loadData(): Int {
