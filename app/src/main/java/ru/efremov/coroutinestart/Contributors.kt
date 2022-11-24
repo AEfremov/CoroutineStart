@@ -90,9 +90,30 @@ interface Contributors: CoroutineScope {
                     }
                 }.setUpCancellation()
             }
-            Variant.NOT_CANCELLABLE -> TODO()
-            Variant.PROGRESS -> TODO()
-            Variant.CHANNELS -> TODO()
+            Variant.NOT_CANCELLABLE -> {
+                launch {
+                    val users = loadContributorsNotCancellable(service, req)
+                    updateResults(users, startTime)
+                }.setUpCancellation()
+            }
+            Variant.PROGRESS -> {
+                launch(Dispatchers.Default) {
+                    loadContributorsProgress(service, req) { users, completed ->
+                        withContext(Dispatchers.Main) {
+                            updateResults(users, startTime, completed)
+                        }
+                    }
+                }.setUpCancellation()
+            }
+            Variant.CHANNELS -> {
+                launch(Dispatchers.Default) {
+                    loadContributorsChannels(service, req) { users, completed ->
+                        withContext(Dispatchers.Main) {
+                            updateResults(users, startTime, completed)
+                        }
+                    }
+                }.setUpCancellation()
+            }
         }
     }
 

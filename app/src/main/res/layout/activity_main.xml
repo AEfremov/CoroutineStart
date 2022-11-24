@@ -65,6 +65,30 @@
 <!--        app:layout_constraintTop_toBottomOf="@id/tv_organization"-->
 <!--        android:layout_marginTop="8dp" />-->
 
+    <LinearLayout
+        android:id="@+id/ll_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/til_pass_token"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:id="@+id/tv_progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            tools:text="PROGRESS" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contributors"
         android:layout_width="0dp"
@@ -74,7 +98,7 @@
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_pass_token"
+        app:layout_constraintTop_toBottomOf="@id/ll_progress"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@id/button_load"
         android:layout_marginBottom="8dp"

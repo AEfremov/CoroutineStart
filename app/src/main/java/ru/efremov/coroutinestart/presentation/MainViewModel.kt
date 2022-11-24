@@ -33,6 +33,10 @@ class MainViewModel : ViewModel(), Contributors {
     val state: LiveData<State>
         get() = _state
 
+    private val _progress = MutableLiveData<String>()
+    val progress: LiveData<String>
+        get() = _progress
+
     override val job: Job
         get() = Job()
 
@@ -41,7 +45,7 @@ class MainViewModel : ViewModel(), Contributors {
             login,
             token,
             "kotlin",
-            Variant.CONCURRENT
+            Variant.PROGRESS
         )
     }
 
@@ -55,7 +59,7 @@ class MainViewModel : ViewModel(), Contributors {
     }
 
     override fun getSelectedVariant(): Variant {
-        return Variant.CONCURRENT
+        return Variant.PROGRESS
     }
 
     override fun updateContributors(users: List<User>) {
@@ -72,6 +76,11 @@ class MainViewModel : ViewModel(), Contributors {
 
     override fun setLoadingStatus(text: String, iconRunning: Boolean) {
         logDebug(LOG_TAG, text)
+        if (iconRunning) {
+            _progress.postValue(text)
+        } else {
+            _progress.postValue("")
+        }
     }
 
     override fun setActionsStatus(newLoadingEnabled: Boolean, cancellationEnabled: Boolean) {

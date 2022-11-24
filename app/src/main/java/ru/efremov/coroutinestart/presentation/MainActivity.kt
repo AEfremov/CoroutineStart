@@ -2,6 +2,7 @@ package ru.efremov.coroutinestart.presentation
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -54,6 +55,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonSaveParams.setOnClickListener {
             vm.saveUserParamsToStorage()
+        }
+
+        vm.progress.observe(this) {
+            if (it.isNotEmpty()) {
+                binding.llProgress.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.tvProgressText.text = it
+            } else {
+                binding.llProgress.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+                binding.tvProgressText.text = ""
+            }
         }
     }
 }
